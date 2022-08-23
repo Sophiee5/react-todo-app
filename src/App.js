@@ -32,6 +32,7 @@ export default function App() {
         <div className="title">
           <h1>할 일 목록</h1>
         </div>
+        {/* <h1 className="text-3xl font-bold underline">Tailwindcss 테스트!!</h1> */}
 
         <List todoData={todoData} setTodoData={setTodoData} />
 
