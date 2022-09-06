@@ -1,56 +1,56 @@
 import React from "react";
 
-export default function List(props) {
-  const btnStyle = {
-    color: "#fff",
-    border: "none",
-    padding: "5px 9px",
-    borderRadius: "50%",
-    cursor: "pointer",
-    float: "right",
-  };
-
+export const List = ({
+  id,
+  title,
+  completed,
+  todoData,
+  setTodoData,
+  provided,
+  snapshot,
+}) => {
   const handleCompleteChange = (id) => {
-    let newTodoData = props.todoData.map((data) => {
+    let newTodoData = todoData.map((data) => {
       if (data.id === id) {
         data.completed = !data.completed;
       }
       console.log(data);
       return data;
     });
-    props.setTodoData(newTodoData);
-  };
-
-  const getStyle = (completed) => {
-    return {
-      padding: "10px",
-      borderBottom: "1px #ccc dotted",
-      // todoData 안의 completed(key) 의 값이 true : false (value) 에 따라 텍스트 스타일 다르게 출력해주기
-      textDecoration: completed ? "line-through" : "none",
-    };
+    setTodoData(newTodoData);
   };
 
   //array.prototype.filter() : 어떠한 데이터 배열 안에서 주어진 함수의 테스트(조건)를 통과하는 데이터만을 가지고 새로운 배열에 담아준다.
   const handleClick = (id) => {
-    let newTodoData = props.todoData.filter((data) => data.id !== id);
-    props.setTodoData(newTodoData);
+    let newTodoData = todoData.filter((data) => data.id !== id);
+    setTodoData(newTodoData);
   };
-
   return (
-    <div>
-      {props.todoData.map((data) => (
-        <div style={getStyle(data.completed)} key={data.id}>
-          <input
-            type="checkbox"
-            defaultChecked={false}
-            onChange={() => handleCompleteChange(data.id)}
-          />
-          {data.title}
-          <button style={btnStyle} onClick={() => handleClick(data.id)}>
-            x
-          </button>
-        </div>
-      ))}
+    <div
+      key={id}
+      {...provided.draggableProps}
+      ref={provided.innerRef}
+      {...provided.dragHandleProps}
+      className={`${
+        snapshot.isDragging ? "bg-gray-400" : "bg-gray-100"
+      } flex items-center justify-between w-full px-4 py-1 my-2 text-gray-600 border rounded`}
+    >
+      <div className="items-center">
+        <input
+          type="checkbox"
+          defaultChecked={completed}
+          onChange={() => handleCompleteChange(id)}
+        />
+        <span className={completed ? "line-through" : undefined}>{title}</span>
+      </div>
+      <div className="items-center">
+        <button
+          className="px-4 py-2 float-right"
+          onClick={() => handleClick(id)}
+        >
+          x
+        </button>
+      </div>
     </div>
   );
-}
+};

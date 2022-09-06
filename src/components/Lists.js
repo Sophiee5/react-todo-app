@@ -2,25 +2,9 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Droppable } from "react-beautiful-dnd";
 import { DragDropContext } from "react-beautiful-dnd";
+import { List } from "./List";
 
-export default function List(props) {
-  const handleCompleteChange = (id) => {
-    let newTodoData = props.todoData.map((data) => {
-      if (data.id === id) {
-        data.completed = !data.completed;
-      }
-      console.log(data);
-      return data;
-    });
-    props.setTodoData(newTodoData);
-  };
-
-  //array.prototype.filter() : 어떠한 데이터 배열 안에서 주어진 함수의 테스트(조건)를 통과하는 데이터만을 가지고 새로운 배열에 담아준다.
-  const handleClick = (id) => {
-    let newTodoData = props.todoData.filter((data) => data.id !== id);
-    props.setTodoData(newTodoData);
-  };
-
+export default function Lists(props) {
   const handleEnd = (result) => {
     // result 매개변수에는 source 항목 및 대상 위치와 같은 드래그 이벤트에 대한 정보가 포함되어있다.
     // console.log("result :", result);
@@ -51,38 +35,16 @@ export default function List(props) {
                   index={index}
                 >
                   {(provided, snapshot) => (
-                    <div
-                      key={data.id}
-                      {...provided.draggableProps}
-                      ref={provided.innerRef}
-                      {...provided.dragHandleProps}
-                      className={`${
-                        snapshot.isDragging ? "bg-gray-400" : "bg-gray-100"
-                      } flex items-center justify-between w-full px-4 py-1 my-2 text-gray-600 border rounded`}
-                    >
-                      <div className="items-center">
-                        <input
-                          type="checkbox"
-                          defaultChecked={false}
-                          onChange={() => handleCompleteChange(data.id)}
-                        />
-                        <span
-                          className={
-                            data.completed ? "line-through" : undefined
-                          }
-                        >
-                          {data.title}
-                        </span>
-                      </div>
-                      <div className="items-center">
-                        <button
-                          className="px-4 py-2 float-right"
-                          onClick={() => handleClick(data.id)}
-                        >
-                          x
-                        </button>
-                      </div>
-                    </div>
+                    <List
+                      key={data.key}
+                      id={data.id}
+                      title={data.title}
+                      completed={data.completed}
+                      todoData={props.todoData}
+                      setTodoData={props.setTodoData}
+                      provided={provided}
+                      snapshot={snapshot}
+                    />
                   )}
                 </Draggable>
               ))}
